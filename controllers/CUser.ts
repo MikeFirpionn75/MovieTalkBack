@@ -1,11 +1,15 @@
-const { User } = require("../models/MUser");
+import { MLike } from "../models/MLike";
+import { MMovie } from "../models/MMovie";
+import { CLike } from "./CLike";
+
+const { MUser } = require("../models/MUser");
 const bcrypt = require("bcrypt");
 
 //ROUTE GET POUR RECUPERER TOUS LES UTILISATEURS
 // NB : utiliser http:// et non https !!
 export const getUsers = async (req: any, res: any) => {
   try {
-    const users = await User.findAll();
+    const users = await MUser.findAll();
     console.log(users);
     res.send(users);
   } catch (error) {
@@ -14,12 +18,43 @@ export const getUsers = async (req: any, res: any) => {
   }
 };
 
+//ROUTE GET POUR RECUPERER UN USER
+// NB : utiliser http:// et non https !!
+export const getUser = async (req: any, res: any) => {
+  try {
+    const users = await MUser.findByPk(req.params.id);
+    console.log(users);
+    res.send(users);
+  } catch (error) {
+    console.error("Error occurred:", error);
+    res.status(500).send("An error occurred");
+  }
+};
+
+// export const getUserLikedMovies = async (req: any, res: any) => {
+//   try {
+//     const likedMovies = []
+//     let  likes = await MLike.findAll({where: {
+//       userId: req.params.id
+//     }})
+  
+//     console.log(likes)
+//     likes.forEach(async (like) => {
+//      let likedMovie = await fetch()
+//     })
+//     res.send(likes)
+//   } catch (error) {
+//     console.error("Error occurred:", error);
+//     res.status(500).send("An error occurred");
+//   }
+// };
+
 //ROUTE POST POUR VERIFIER SI L'UTILISATEUR A DEJA UN COMPTE et qu'il a le bon mot de passe
 // NB : utiliser http:// et non https !!
 export const checkUser = async (req: any, res: any) => {
   const { mail } = req.body;
   try {
-    const user = await User.findOne({ where: { mail } });
+    const user = await MUser.findOne({ where: { mail } });
     console.log(user);
     if (user) {
       // L'utilisateur existe dans la table
@@ -60,7 +95,7 @@ export const signUp = async (req: any, res: any) => {
       // Gérer le cas où le mot de passe est manquant
       return res.status(400).send("Le mot de passe est requis");
     }
-    const [user, created] = await User.findOrCreate({
+    const [user, created] = await MUser.findOrCreate({
       where: { mail: req.body.mail },
       defaults: {
         lastName: req.body.lastName,

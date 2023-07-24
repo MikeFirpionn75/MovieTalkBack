@@ -9,6 +9,7 @@ const topicRoutes = require("./routes/RTopic")
 const commentRoutes = require("./routes/RComment")
 const ratingRoutes = require("./routes/RRating")
 const likeRoutes = require("./routes/RLike")
+// const index = require("./routes/index")
 
 const cors = require("cors");
 const app = express();
@@ -22,9 +23,7 @@ const main = async () => {
   app.use(bodyParser.json())
 
   app.use(
-    cors({
-      origin: "http://localhost:5173",
-    })
+    cors()
   );
 
   connectDb();
@@ -33,7 +32,9 @@ const main = async () => {
     console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
     });
 
-  app.use("/", usersRoutes);
+  // app.use("/", index)
+
+  app.use("/user", usersRoutes);
   app.use("/movie", movieRoutes);
   app.use("/topic", topicRoutes);
   app.use("/comment", commentRoutes);

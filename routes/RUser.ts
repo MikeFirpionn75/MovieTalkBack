@@ -1,13 +1,17 @@
 import express from "express";
-import { signUp, getUsers, checkUser } from "../controllers/CUser";
+
+import { signUp, getUsers, getUser, checkUser, } from "../controllers/CUser";
+
 const router = express.Router();
 
 // const userCtrl = require("../controllers/user");
 // const adminMiddleware = require("../middleware/adminMiddleware");
-
+router.get("/", getUsers);
+router.get("/:id", getUser);
+// router.get("/sub/:id", getUserLikedMovies)
 router.post("/signup", signUp);
-router.get("/users", getUsers);
 router.post("/signin", checkUser);
+router.get("/user/:id", getUser);
 
 module.exports = router;
 
